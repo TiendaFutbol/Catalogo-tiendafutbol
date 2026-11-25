@@ -1,0 +1,35 @@
+package cl.tienda.ms.catalogo.model;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import org.hibernate.annotations.TimeZoneStorage;
+import org.hibernate.annotations.TimeZoneStorageType;
+
+@Entity
+@Table(name = "ofertas")
+@Getter
+@Setter
+@NoArgsConstructor
+public class Oferta {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "producto_id", nullable = false)
+    private Producto producto;
+    @Column(name = "descuento_porcentaje", nullable = false, precision = 5, scale = 2)
+    private BigDecimal descuentoPorcentaje;
+    @TimeZoneStorage(TimeZoneStorageType.NATIVE)
+    @Column(name = "fecha_inicio", nullable = false)
+    private OffsetDateTime fechaInicio;
+    @TimeZoneStorage(TimeZoneStorageType.NATIVE)
+    @Column(name = "fecha_fin")
+    private OffsetDateTime fechaFin;
+    @Convert(converter = org.hibernate.type.NumericBooleanConverter.class)
+    @Column(nullable = false, columnDefinition = "NUMBER(1)")
+    private boolean activa = true;
+}
